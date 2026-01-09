@@ -158,3 +158,24 @@ html, body {
         transform: rotate(-1deg) translateX(0px) translateY(0px);
     }
 }
+
+
+.email-btn {
+    position: absolute;
+    left: 24px; /* lower-left */
+    bottom: 20px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.55);
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.18);
+    transition: transform 150ms ease, background 150ms ease;
+}
+
+    .email-btn:hover {
+        transform: translateY(-1px);
+        background: rgba(0, 0, 0, 0.65);
+    }

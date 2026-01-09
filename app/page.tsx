@@ -81,6 +81,14 @@ export default function Home() {
 
             {/* make sure this matches your actual filename */}
             <audio ref={audioRef} src="/audio/guitars.mp3" preload="metadata" />
+
+            <a
+                className="email-btn"
+                href="mailto:miakata@gmail.com?subject=change%20the%20vibes"
+            >
+                Change the vibes ✉️
+            </a>
+
         </div>
     )
 }
