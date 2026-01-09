@@ -1,65 +1,86 @@
-import Image from "next/image";
+﻿"use client"
+import { useRef, useState } from "react"
+
+const clamp01 = (n: number) => Math.min(1, Math.max(0, n))
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    const audioRef = useRef<HTMLAudioElement>(null)
+    const [started, setStarted] = useState(false)
+
+    const start = () => {
+        const audio = audioRef.current
+        if (!audio) return
+
+        const fadeIn = (target = 0.7, duration = 4000) => {
+            const startTime = performance.now()
+            audio.volume = 0
+
+            const step = (now: number) => {
+                const rawT = (now - startTime) / duration
+                const t = clamp01(rawT)
+                audio.volume = clamp01(t * target)
+                if (t < 1) requestAnimationFrame(step)
+            }
+
+            requestAnimationFrame(step)
+        }
+
+        const playAudio = async () => {
+            // pick a random start point (leave 10s buffer if possible)
+            const duration = Number.isFinite(audio.duration) ? audio.duration : 0
+            const maxStart = Math.max(0, duration - 10)
+            audio.currentTime = maxStart > 0 ? Math.random() * maxStart : 0
+
+            audio.loop = true
+            audio.volume = 0
+
+            try {
+                await audio.play()
+                fadeIn()
+            } catch (e) {
+                // If the browser still blocks playback for any reason,
+                // you'll see it here instead of a silent failure.
+                console.error("Audio play() failed:", e)
+            }
+        }
+
+        if (audio.readyState >= 1) {
+            void playAudio()
+        } else {
+            audio.onloadedmetadata = () => void playAudio()
+        }
+
+        setStarted(true)
+    }
+
+    return (
+        <div className="scene">
+            <img src="/img/scene.png" className="bg" alt="Scene" />
+            <div className="scribble">Clo’s radio</div>
+
+
+            {/* steam sprites you already have */}
+            <div className="steam" aria-hidden="true">
+                <img src="/img/steam1.png" className="steam-img s1" alt="" />
+                <img src="/img/steam2.png" className="steam-img s2" alt="" />
+                <img src="/img/steam3.png" className="steam-img s3" alt="" />
+            </div>
+
+            {/* ZzZ sprites (place them above the cat) */}
+            <div className="zzz" aria-hidden="true">
+                <img src="/img/z1.png" className="zzz-img zzz1" alt="" />
+                <img src="/img/z2.png" className="zzz-img zzz2" alt="" />
+                <img src="/img/z3.png" className="zzz-img zzz3" alt="" />
+            </div>
+
+            {!started && (
+                <div className="start-overlay" onClick={start} role="button" tabIndex={0}>
+                    <div className="start-button">Click to start ✨</div>
+                </div>
+            )}
+
+            {/* make sure this matches your actual filename */}
+            <audio ref={audioRef} src="/audio/guitars.mp3" preload="metadata" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    )
 }

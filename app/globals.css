@@ -1,26 +1,160 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+html, body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient( to right, #2E1E13 0%, #3A2517 10%, #462E1C 20%, #523620 30%, #5E3F25 40%, #69472A 50%, #724A2B 60%, #7A4D2C 70%, #834F2D 80%, #8B522E 90%, #9E562F 100% );
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.scene {
+   position:relative;
+    margin: 0 auto;
+    width: 70vw;
+    height: 100%;
+    overflow: hidden;
+  
+   
+    
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.steam {
+    position: absolute;
+    left: 53%;
+    bottom: 20%;
+    width: 80px;
+    height: 120px;
+    pointer-events: none;
+}
+
+.steam-img {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    animation: steamFloat 6s ease-in-out infinite;
+}
+
+.s1 {
+    animation-delay: 0s;
+}
+
+.s2 {
+    animation-delay: 2s;
+}
+
+.s3 {
+    animation-delay: 4s;
+}
+
+@keyframes steamFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(1);
+    }
+
+    20% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translateY(-20px) scale(1.05);
+    }
+
+    80% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) scale(1.1);
+    }
+}
+.start-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    z-index: 10;
+}
+
+.start-button {
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+/* ---- ZzZ overlay ---- */
+.zzz {
+  position: absolute;
+  /* adjust these to sit above the cat’s head */
+  left: 17%;
+  top: 36%;
+  width: 120px;
+  height: 70px;
+  pointer-events: none;
+}
+
+.zzz-img {
+  position: relative;
+  width: auto;   /* tweak per your PNG size */
+  height: auto;
+  opacity: 0.95;
+  animation: zzzWiggle 2.6s ease-in-out infinite;
+}
+
+/* Stagger + positioning for the 3 pngs */
+.zzz-img.z1 { left: 0px;  top: 18px; animation-delay: 0s; }
+.zzz-img.z2 { left: 26px; top: 6px;  animation-delay: 0.25s; }
+.zzz-img.z3 { left: 52px; top: 0px;  animation-delay: 0.5s; }
+
+/* Gentle left-right drift + tiny float */
+@keyframes zzzWiggle {
+  0%   { transform: translateX(0px) translateY(0px); }
+  50%  { transform: translateX(6px) translateY(-2px); }
+  100% { transform: translateX(0px) translateY(0px); }
+}
+
+.scribble {
+    position: absolute;
+    right: 24px;
+    bottom: 20px;
+    font-family: inherit;
+    font-size: 30px;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+    pointer-events: none;
+    animation: scribbleWiggle 3.5s ease-in-out infinite;
+}
+
+@keyframes scribbleWiggle {
+    0% {
+        transform: rotate(-1deg) translateX(0px) translateY(0px);
+    }
+
+    25% {
+        transform: rotate(0.5deg) translateX(1px) translateY(-1px);
+    }
+
+    50% {
+        transform: rotate(1deg) translateX(0px) translateY(1px);
+    }
+
+    75% {
+        transform: rotate(-0.5deg) translateX(-1px) translateY(0px);
+    }
+
+    100% {
+        transform: rotate(-1deg) translateX(0px) translateY(0px);
+    }
 }
